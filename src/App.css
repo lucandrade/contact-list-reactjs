@@ -22,3 +22,25 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+.login-container {
+    width: 360px;
+    padding: 8% 0 0;
+    margin: auto;
+}
+
+.login-container .form {
+    position: relative;
+    background: #FFFFFF;
+    max-width: 360px;
+    margin: 0 auto 100px;
+    padding: 45px;
+}
+
+.login-container .form .message {
+    font-size: 12px;
+}
+
+.login-container .form .message a {
+    color: rgb(0, 137, 161);
+}
