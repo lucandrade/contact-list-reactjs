@@ -1,5 +1,5 @@
 const actions = {
-	login: 'LOGIN'
+	setUser: 'SET_USER'
 }
 
 export default {
