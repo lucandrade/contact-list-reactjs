@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { Paper, AppBar, TextField, RaisedButton } from 'material-ui';
 
+import * as Actions from '../actions/AppActions';
+import SendLogin from '../requests/Login';
+
 export default class Login extends Component {
     constructor(props) {
         super(props);
@@ -21,14 +24,20 @@ export default class Login extends Component {
 
     handleSubmit() {
         const me = this;
-        this.setState({
+        const { username, password } = this.state;
+        me.setState({
             sending: true
         });
-        setTimeout(() => {
-            me.setState({
-                sending: false
+        SendLogin(username, password)
+            .then(res => {
+                Actions.setUser(res);
+            })
+            .catch(err => {
+                me.setState({
+                    sending: false
+                });
+                Actions.showMessage('Usuário e senha não conferem');
             });
-        }, 1500);
     }
 
     render() {

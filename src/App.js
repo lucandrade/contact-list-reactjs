@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 
 import './App.css';
 import Guest from './Guest';
+import Logged from './Logged';
 import Loading from './pages/Loading';
 import GetMe from './requests/GetMe';
 import Store from './stores/AppStore';
+import * as Actions from './actions/AppActions';
 
 export default class App extends Component {
     constructor(props) {
@@ -29,12 +31,17 @@ export default class App extends Component {
     componentDidMount() {
         const me = this;
         Store.on('change_user', this.updateState);
-        GetMe().then(user => {
-            me.loaded = true;
-            me.setState({
-                loading: !me.loaded
+        GetMe()
+            .then(user => Actions.setUser(user))
+            .catch(err => {
+
+            })
+            .finally(() => {
+                me.loaded = true;
+                me.setState({
+                    loading: !me.loaded
+                });
             });
-        });
     }
 
     componentWillUnmount() {
@@ -42,11 +49,11 @@ export default class App extends Component {
     }
 
     render() {
-        const { loading } = this.state;
+        const { loading, user } = this.state;
         let view = <Loading />;
 
         if (!loading) {
-            view = <Guest />;
+            view = user && user.id ? <Logged /> : <Guest />;
         }
 
         return view;

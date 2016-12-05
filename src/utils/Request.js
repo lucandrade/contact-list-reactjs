@@ -20,9 +20,9 @@ instance.interceptors.response.use(response => {
 }, err => {
     if (err.response && err.response.status) {
         instance.defaults.headers = {};
-    } else {
-        return Promise.reject(err);
     }
+
+    return Promise.reject(err);
 });
 
 export default instance;

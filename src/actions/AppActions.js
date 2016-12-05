@@ -9,3 +9,16 @@ export function setUser(user) {
         user,
 	});
 }
+
+export function showMessage(message) {
+	dispatcher.dispatch({
+		type: actions.showMessage,
+        message,
+	});
+}
+
+export function hideMessage() {
+	dispatcher.dispatch({
+		type: actions.hideMessage,
+	});
+}

@@ -8,8 +8,9 @@ export default function GetMe() {
                 if (res && res.data) {
                     resolve(res.data);
                 } else {
-                    resolve(false);
+                    reject(res);
                 }
-            });
+            })
+            .catch(err => reject(err));
     });
 }
