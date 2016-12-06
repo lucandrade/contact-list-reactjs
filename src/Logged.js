@@ -5,6 +5,7 @@ import { Card, CardText } from 'material-ui/Card';
 
 import Menu from './components/Menu';
 import Contacts from './pages/Contacts';
+import Contact from './pages/Contact';
 import Store from './stores/AppStore';
 import { logout } from './actions/AppActions';
 
@@ -63,6 +64,7 @@ export default class AppRouter extends Component {
         return (
             <Router history={hashHistory}>
                 <Route path="/" component={Logged}>
+                    <Route path="/novo" component={Contact}/>
                     <Route path="*" component={Contacts}/>
                 </Route>
             </Router>
