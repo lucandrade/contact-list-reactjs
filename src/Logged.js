@@ -4,7 +4,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { Card, CardText } from 'material-ui/Card';
 
 import Menu from './components/Menu';
-import Home from './pages/Home';
+import Contacts from './pages/Contacts';
 import Store from './stores/AppStore';
 import { logout } from './actions/AppActions';
 
@@ -40,7 +40,7 @@ class Logged extends Component {
 
     render() {
         const { user } = this.state;
-        const view = this.props.children ? this.props.children : <Home />;
+        const view = this.props.children ? this.props.children : <Contacts />;
         const cardStyle = {
             margin: '20px'
         }
@@ -63,8 +63,7 @@ export default class AppRouter extends Component {
         return (
             <Router history={hashHistory}>
                 <Route path="/" component={Logged}>
-                    <Route path="home" component={Home} />
-                    <Route path="*" component={Home}/>
+                    <Route path="*" component={Contacts}/>
                 </Route>
             </Router>
         );

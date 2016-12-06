@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import GetContacts from '../requests/GetContacts';
 
-export default class Home extends Component {
+export default class Contacts extends Component {
     constructor(props) {
         super(props);
         this.state = {
