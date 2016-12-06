@@ -2,7 +2,7 @@
 
 This is a frontend of the contact list application
 
-[DEMO](https://lucandrade.github.io/contact-list-reactjs/)
+[Live Demo](https://lucandrade.github.io/contact-list-reactjs/)
 
 For backend source code, follow the link below
 
