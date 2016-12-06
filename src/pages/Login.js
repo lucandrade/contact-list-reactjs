@@ -31,6 +31,7 @@ export default class Login extends Component {
         SendLogin(username, password)
             .then(res => {
                 Actions.setUser(res);
+                return true;
             })
             .catch(err => {
                 me.setState({

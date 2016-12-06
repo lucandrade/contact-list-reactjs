@@ -1,5 +1,6 @@
 import dispatcher from '../dispatcher';
 import AppConstants from '../constants/AppConstants';
+import Request from '../utils/Request';
 
 const { actions } = AppConstants;
 
@@ -21,4 +22,10 @@ export function hideMessage() {
 	dispatcher.dispatch({
 		type: actions.hideMessage,
 	});
+}
+
+export function logout() {
+	window.localStorage.removeItem('token');
+	Request.defaults.headers = {};
+	setUser(false);
 }

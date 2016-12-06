@@ -1,15 +1,57 @@
 import React, { Component } from 'react';
 import { hashHistory, Router, Route } from 'react-router';
-
-import Home from './pages/Home';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import { Card, CardText } from 'material-ui/Card';
+
+import Menu from './components/Menu';
+import Home from './pages/Home';
+import Store from './stores/AppStore';
+import { logout } from './actions/AppActions';
 
 class Logged extends Component {
+    constructor(props) {
+        super(props);
+        this.initialState = this.initialState.bind(this);
+        this.updateState = this.updateState.bind(this);
+        this.state = this.initialState();
+    }
+
+    initialState() {
+        return {
+            user: Store.getUser(),
+        }
+    }
+
+    updateState() {
+        this.setState(this.initialState());
+    }
+
+    componentDidMount() {
+        Store.on('change_user', this.updateState);
+    }
+
+    componentWillUnmount() {
+        Store.removeListener('change_user', this.updateState);
+    }
+
+    handleLogout() {
+        logout();
+    }
+
     render() {
+        const { user } = this.state;
+        const view = this.props.children ? this.props.children : <Home />;
+        const cardStyle = {
+            margin: '20px'
+        }
+
         return (
             <MuiThemeProvider>
                 <div>
-                    {this.props.children ? this.props.children : <Home />}
+                    <Menu user={user} onLogout={this.handleLogout.bind(this)} />
+                    <Card style={cardStyle}>
+                        <CardText children={view} />
+                    </Card>
                 </div>
             </MuiThemeProvider>
         );
