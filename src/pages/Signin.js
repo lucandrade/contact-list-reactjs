@@ -12,7 +12,12 @@ export default class Signin extends Component {
             sending: false,
             email: '',
             password: '',
-            name: ''
+            name: '',
+            errors: {
+                email: false,
+                password: false,
+                name: false,
+            }
         }
     }
 
@@ -40,15 +45,29 @@ export default class Signin extends Component {
                 return true;
             })
             .catch(err => {
+                const errors = {
+                    email: false,
+                    password: false,
+                    name: false,
+                };
+                if (err && err.response && err.response.data && err.response.data.messages) {
+                    for (const error in errors) {
+                        if (err.response.data.messages[error]) {
+                            errors[error] = err.response.data.messages[error];
+                        }
+                    }
+                }
+
                 me.setState({
-                    sending: false
+                    sending: false,
+                    errors,
                 });
                 showMessage('Erro ao criar usuário');
             });
     }
 
     render() {
-        const { email, name, password, sending } = this.state;
+        const { email, name, password, errors, sending } = this.state;
         return (
             <div className="login-container">
                 <AppBar title="Cadastrar" showMenuIconButton={false} />
@@ -57,6 +76,7 @@ export default class Signin extends Component {
                         hintText="Nome"
                         floatingLabelText="Nome"
                         fullWidth={true}
+                        errorText={errors.name}
                         onChange={this.handleChange.bind(this)}
                         value={name}
                         name="name" />
@@ -65,6 +85,7 @@ export default class Signin extends Component {
                         hintText="Email"
                         floatingLabelText="Email"
                         fullWidth={true}
+                        errorText={errors.email}
                         onChange={this.handleChange.bind(this)}
                         value={email}
                         name="email" />
@@ -73,6 +94,7 @@ export default class Signin extends Component {
                         hintText="Senha"
                         floatingLabelText="Senha"
                         fullWidth={true}
+                        errorText={errors.password}
                         onChange={this.handleChange.bind(this)}
                         value={password}
                         name="password" />
