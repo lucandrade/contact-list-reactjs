@@ -1,5 +1,7 @@
 # Contact List App - ReactJS
 
+###### by [Lucas Andrade](https://github.com/lucandrade)
+
 This is a frontend of the contact list application
 
 [Live Demo](https://lucandrade.github.io/contact-list-reactjs/)
