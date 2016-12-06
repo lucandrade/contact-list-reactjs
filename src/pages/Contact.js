@@ -3,14 +3,41 @@ import { Link } from 'react-router';
 import { TextField, RaisedButton } from 'material-ui';
 
 import CreateContact from '../requests/CreateContact';
+import UpdateContact from '../requests/UpdateContact';
+import LoadContact from '../requests/LoadContact';
 import { showMessage } from '../actions/AppActions';
 
 export default class Contact extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            contact: {},
-            sending: false
+            id: null,
+            contact: {
+                name: '',
+                email: '',
+                phone: '',
+                address: '',
+            },
+            sending: false,
+            title: 'Adicionar Contato'
+        }
+
+        if (props.params && props.params.id) {
+            const me = this;
+            LoadContact(props.params.id)
+                .then(res => {
+                    const contact = this.state.contact;
+                    for (const field in contact) {
+                        if (res[field]) {
+                            contact[field] = res[field];
+                        }
+                    }
+                    me.setState({
+                        id: props.params.id,
+                        title: `Editar '${res.name}'`,
+                        contact,
+                    });
+                });
         }
     };
 
@@ -23,30 +50,46 @@ export default class Contact extends Component {
 
     handleSubmit() {
         const me = this;
-        const { contact } = me.state;
+        const { id, contact } = me.state;
         me.setState({
             sending: true
         });
-        CreateContact(contact)
-            .then(res => {
-                showMessage('Contato criado');
-                document.getElementById('gotocontact').click();
-                return true;
-            })
-            .catch(err => {
-                me.setState({
-                    sending: false,
+        
+        if (!id) {
+            CreateContact(contact)
+                .then(res => {
+                    showMessage('Contato criado');
+                    document.getElementById('gotocontact').click();
+                    return true;
+                })
+                .catch(err => {
+                    me.setState({
+                        sending: false,
+                    });
+                    showMessage('Erro ao criar contato');
                 });
-                showMessage('Erro ao criar contato');
-            });
+        } else {
+            UpdateContact(id, contact)
+                .then(res => {
+                    showMessage('Contato atualizado');
+                    document.getElementById('gotocontact').click();
+                    return true;
+                })
+                .catch(err => {
+                    me.setState({
+                        sending: false,
+                    });
+                    showMessage('Erro ao atualizar contato');
+                });
+        }
     }
 
     render() {
-        const { contact, sending } = this.state;
+        const { title, contact, sending } = this.state;
         return (
             <div>
                 <h4 className='title'>
-                    Contato
+                    {title}
                     <Link id='gotocontact' to='/' className="icon">&times;</Link>
                 </h4>
                 <TextField
@@ -55,7 +98,7 @@ export default class Contact extends Component {
                     floatingLabelText="Nome"
                     fullWidth={true}
                     onChange={this.handleChange.bind(this)}
-                    value={contact.name || ''}
+                    value={contact.name}
                     name="name" />
                 <TextField
                     type="email"
@@ -63,7 +106,7 @@ export default class Contact extends Component {
                     floatingLabelText="Email"
                     fullWidth={true}
                     onChange={this.handleChange.bind(this)}
-                    value={contact.email || ''}
+                    value={contact.email}
                     name="email" />
                 <TextField
                     type="phone"
@@ -71,7 +114,7 @@ export default class Contact extends Component {
                     floatingLabelText="Telefone"
                     fullWidth={true}
                     onChange={this.handleChange.bind(this)}
-                    value={contact.phone || ''}
+                    value={contact.phone}
                     name="phone" />
                 <TextField
                     type="address"
@@ -79,7 +122,7 @@ export default class Contact extends Component {
                     floatingLabelText="Endereço"
                     fullWidth={true}
                     onChange={this.handleChange.bind(this)}
-                    value={contact.address || ''}
+                    value={contact.address}
                     name="address" />
                 <br />
                 <br />

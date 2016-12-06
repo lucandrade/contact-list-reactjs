@@ -77,6 +77,7 @@ export default class AppRouter extends Component {
             <Router history={hashHistory}>
                 <Route path="/" component={Logged}>
                     <Route path="/novo" component={Contact}/>
+                    <Route path="/editar/:id" component={Contact}/>
                     <Route path="*" component={Contacts}/>
                 </Route>
             </Router>
