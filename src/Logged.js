@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import { hashHistory, Router, Route } from 'react-router';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { Card, CardText } from 'material-ui/Card';
+import { Snackbar } from 'material-ui';
 
 import Menu from './components/Menu';
 import Contacts from './pages/Contacts';
 import Contact from './pages/Contact';
 import Store from './stores/AppStore';
-import { logout } from './actions/AppActions';
+import { logout, hideMessage } from './actions/AppActions';
 
 class Logged extends Component {
     constructor(props) {
@@ -20,6 +21,7 @@ class Logged extends Component {
     initialState() {
         return {
             user: Store.getUser(),
+            message: Store.getMessage(),
         }
     }
 
@@ -28,11 +30,15 @@ class Logged extends Component {
     }
 
     componentDidMount() {
-        Store.on('change_user', this.updateState);
+        Store.on('change', this.updateState);
     }
 
     componentWillUnmount() {
-        Store.removeListener('change_user', this.updateState);
+        Store.removeListener('change', this.updateState);
+    }
+
+    handleHideMessage() {
+        hideMessage();
     }
 
     handleLogout() {
@@ -40,8 +46,13 @@ class Logged extends Component {
     }
 
     render() {
-        const { user } = this.state;
+        const { user, message } = this.state;
         const view = this.props.children ? this.props.children : <Contacts />;
+        const snack = <Snackbar
+            open={message.visible}
+            message={message.text}
+            autoHideDuration={4000}
+            onRequestClose={this.handleHideMessage.bind(this)} />;
         const cardStyle = {
             margin: '20px'
         }
@@ -53,6 +64,7 @@ class Logged extends Component {
                     <Card style={cardStyle}>
                         <CardText children={view} />
                     </Card>
+                    {snack}
                 </div>
             </MuiThemeProvider>
         );

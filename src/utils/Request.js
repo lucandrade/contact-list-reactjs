@@ -18,7 +18,7 @@ const instance = Axios.create(options);
 instance.interceptors.response.use(response => {
     return response;
 }, err => {
-    if (err.response && err.response.status) {
+    if (err.response && err.response.status === 401) {
         instance.defaults.headers = {};
     }
 
