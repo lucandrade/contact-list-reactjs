@@ -1,9 +1,9 @@
 import Axios from "axios";
-import config from '../env';
+import config from './Env';
 
 const token = window.localStorage.getItem('token');
 const options = {
-    baseURL: config.server,
+    baseURL: config.server(),
     withCredentials: true,
     timeout: 30000
 };
